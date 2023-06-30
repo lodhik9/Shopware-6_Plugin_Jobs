@@ -1,0 +1,19 @@
+{
+  "name": "swag/job-example-second",
+  "description": "This is a job post plugin",
+  "version":"0.0.1",
+  "type": "shopware-platform-plugin",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Swag\\JobExampleSecond\\": "src/"
+    }
+  },
+  "extra": {
+    "shopware-plugin-class": "Swag\\JobExampleSecond\\SwagJobExampleSecond",
+    "label": {
+      "de-DE": "Job Post plugin",
+      "en-GB": "Job Post plugin"
+    }
+  }
+}

@@ -32,4 +32,5 @@ class JobController extends StorefrontController
             'page' => $page
         ]);
     }
+	
 }

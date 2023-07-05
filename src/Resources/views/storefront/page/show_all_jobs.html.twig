@@ -1,0 +1,13 @@
+{% sw_extends '@Storefront/storefront/base.html.twig' %}
+
+{% block base_content %}
+    <h1>All Jobs</h1>
+    {% for job in jobs %}
+        <h2>{{ job.translated.title }}</h2>
+        <p>{{ job.translated.description }}</p>
+        {% if job.image %}
+            <img src="{{ job.image.getUrl() }}" alt="Job Image">
+        {% endif %}
+        <a href="{{ path('frontend.jobs.update', { id: job.id }) }}">Update</a>
+    {% endfor %}
+{% endblock %}

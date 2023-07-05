@@ -2,5 +2,20 @@
 
 {% block base_content %}
 {#    {{ dump() }}#}
-    <h1 class="jobs-main-heading">{{ heading }} </h1>
+    <h1 class="jobs-main-heading">{{ heading }}</h1>
+
+    <form action="{{ path('frontend.jobs.create') }}" method="post" enctype="multipart/form-data">
+        <label for="title">Job Title:</label>
+        <input type="text" name="title" id="title" required>
+
+        <label for="description">Job Description:</label>
+        <textarea name="description" id="description" required></textarea>
+
+        <label for="file">Job Image:</label>
+        <input type="file" name="image" id="file">
+
+        <button type="submit">Create Job</button>
+    </form>
+
+    <img class="w-full" src="{{ imagePath }}" alt="main page image">
 {% endblock %}

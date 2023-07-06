@@ -2,5 +2,7 @@
 
 {% block base_content %}
 {#    {{ dump() }}#}
-    <h1 class="jobs-main-heading">{{ heading }} </h1>
+    <h1 class="jobs-main-heading">{{ heading }}</h1>
+    <a href="{{ path('frontend.jobs.createjob', { id: job.id }) }}">Create</a>
+    <img class="w-full" src="{{ imagePath }}" alt="main page image">
 {% endblock %}

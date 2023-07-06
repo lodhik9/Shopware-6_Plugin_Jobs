@@ -5,7 +5,17 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        
+        <service id="Swag\JobExampleSecond\Entity\CustomEntity\JobDefinition" public="true">
+            <tag name="shopware.entity.defintion" entity="swag_job_entity" />
+        </service>
+        <service id="Swag\JobExampleSecond\Api\JobApiController" public="true">
+            <argument type="service" id="media.repository"  />
+            <argument type="service" id="swag_job_entity.repository"  />
+            
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+        </service>
         <service id="Swag\JobExampleSecond\Storefront\Controller\JobController" public="true">
             <argument type="service" id="Shopware\Storefront\Page\GenericPageLoader" />           
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService" />    

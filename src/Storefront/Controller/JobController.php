@@ -23,7 +23,7 @@ use Shopware\Core\Framework\Routing\Annotation\RouteScope;
  */
 class JobController extends StorefrontController
 {
-      private GenericPageLoaderInterface $genericPageLoader;
+    private GenericPageLoaderInterface $genericPageLoader;
     private SystemConfigService $systemConfigService;
     private EntityRepository $mediaRepository;
     private MediaService $mediaService;
@@ -65,6 +65,42 @@ class JobController extends StorefrontController
         ]);
     }
     
+    /**
+    * @Route("/jobs/createjob", name="frontend.jobs.createjob", methods={"GET"})
+    */
+    public function createJobs(Request $request, SalesChannelContext $salesChannelContext, Context $context): Response
+    {
+        $page = $this->genericPageLoader->load($request, $salesChannelContext);
+        $jobPageHeading = $this->systemConfigService->get('SwagJobExampleSecond.config.jobPageHeading' );
+        $jobPageImageId = $this->systemConfigService->get('SwagJobExampleSecond.config.jobPageMedia' );
+    
+        return $this->renderStorefront('@SwagJobExampleSecond/storefront/page/create_jobs.html.twig', [
+            'page' => $page
+        ]);
+    }
+    
+    
+    public function writeData(Context $context): void
+{
+    $this->productRepository->create([
+        [
+            'name' => 'Example product',
+            'productNumber' => 'SW123',
+            'stock' => 10,
+            'taxId' => $this->getTaxId($context),
+            'price' => [['currencyId' => Defaults::CURRENCY, 'gross' => 50, 'net' => 25, 'linked' => false]],
+        ]
+    ], $context);
+}
+
+private function getTaxId(Context $context): string
+{
+    $criteria = new Criteria();
+    $criteria->addFilter(new EqualsFilter('taxRate', 19.00));
+
+    return $this->taxRepository->searchIds($criteria, $context)->firstId();
+}
+
     /**
      * @Route("/jobs/create" , name="frontend.jobs.create" , methods={"POST"})
      */
@@ -209,4 +245,27 @@ public function showAllJobs(SalesChannelContext $salesChannelContext, Context $c
         // Provide feedback to the user
         return new Response('Job updated successfully', Response::HTTP_OK);
     }
+    
+    /**
+ * @Route("/jobs/{id}", name="frontend.jobs.delete", methods={"DELETE"})
+ */
+public function deleteJob(string $id): Response
+{
+    // Fetch the job entity you want to delete
+    $job = $this->jobRepository->find($id);
+
+    if (!$job) {
+        // Handle case where job entity with the given ID is not found
+        // Return an appropriate response or throw an exception
+    }
+
+    // Delete the job entity
+    $this->jobRepository->remove($job);
+
+    // Provide feedback to the user
+    return new Response('Job deleted successfully', Response::HTTP_OK);
+}
+
+    
+    
 }

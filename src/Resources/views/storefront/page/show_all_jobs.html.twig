@@ -5,9 +5,10 @@
     {% for job in jobs %}
         <h2>{{ job.translated.title }}</h2>
         <p>{{ job.translated.description }}</p>
-        {% if job.image %}
-            <img src="{{ job.image.getUrl() }}" alt="Job Image">
-        {% endif %}
+{#        {% if job.image %}#}
+<img src="{{ job.url }}" alt="Job Image">
+{#        {% endif %}#}
         <a href="{{ path('frontend.jobs.update', { id: job.id }) }}">Update</a>
+        <a href="{{ path('frontend.jobs.delete', { id: job.id }) }}" onclick="return confirm('Are you sure you want to delete this job?')">Delete</a>
     {% endfor %}
 {% endblock %}

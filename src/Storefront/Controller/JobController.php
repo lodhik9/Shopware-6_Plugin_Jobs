@@ -16,7 +16,6 @@ use Shopware\Core\Content\Media\MediaService;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Shopware\Core\Content\Media\File\MediaFile;
 use Shopware\Core\Content\Media\File\FileSaver;
-use Shopware\Core\Framework\Routing\Annotation\RouteScope;
 
 /**
  * @Route(defaults={"_routeScope"={"storefront"}})

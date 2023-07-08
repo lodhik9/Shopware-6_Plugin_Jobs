@@ -1,8 +1,14 @@
 {% sw_extends '@Storefront/storefront/base.html.twig' %}
 
 {% block base_content %}
-{#    {{ dump() }}#}
     <h1 class="jobs-main-heading">{{ heading }}</h1>
-    <a href="{{ path('frontend.jobs.createjob', { id: job.id }) }}">Create</a>
-    <img class="w-full" src="{{ imagePath }}" alt="main page image">
+    <div class="container">
+        <div class="column">
+            <div class="col-md-6">
+                <a href="{{ path('frontend.jobs.createjob', { id: job.id }) }}">Create</a>
+                <img class="w-full" src="{{ imagePath }}" alt="main page image">
+            </div>
+        </div>
+    </div>
+    
 {% endblock %}

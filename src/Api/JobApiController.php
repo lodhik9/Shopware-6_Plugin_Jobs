@@ -1,5 +1,4 @@
 <?php
-
 namespace Swag\JobExampleSecond\Api;
 
 use Shopware\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -8,10 +7,13 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Shopware\Core\Framework\Uuid\Uuid;
 use Faker\Factory;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Swag\JobExampleSecond\Entity\CustomEntity\JobDefinition;
+use Shopware\Core\System\Media\MediaEntity;
+use Shopware\Core\Framework\DataAbstractionLayer\Exception\MediaNotFoundException;
 
 /**
  * @Route(defaults={"_routeScope"={"api"}})
@@ -22,39 +24,39 @@ class JobApiController extends AbstractController
      * @var JobDefinition
      */
     private $jobDefinition;
-    
+
     /**
      * @var EntityRepository
      */
     private $mediaRepository;
-
-     /**
-     * @var EntityRepository
-     */
-    private $jobRepository;
     
-    /**
-     * @param JobDefinition $jobDefinition
-     */
-    public function __construct(JobDefinition $jobDefinition, EntityRepository $mediaRepository, EntityRepository $jobRepository )
+//    /**
+//     * @var EntityRepository
+//     */
+//    private $jobRepository;
+
+    public function __construct(
+            JobDefinition $jobDefinition,
+            EntityRepository $mediaRepository,
+//            EntityRepository $jobRepository
+            )
     {
         $this->jobDefinition = $jobDefinition;
         $this->mediaRepository = $mediaRepository;
-        $this->jobRepository = $jobRepository;
+//        $this->jobRepository = $jobRepository;
     }
-    
+
     /**
-     * @Route("/api/v{version}/_action/swag_job_entity/generate", name="api.custom.swag_job_entity.generate", methods={"POST"})
+     * @Route("/api/v1/_action/swag_job_entity/generate", name="api.custom.swag_job_entity.generate", methods={"POST"})
      * @return Response
      */
     public function generate(Context $context): Response
     {
         $faker = Factory::create();
         $media = $this->getActiveMedia($context);
-        
+
         $data = [];
-        for($i = 0; $i < 50; $i++ )
-        {
+        for ($i = 0; $i < 50; $i++) {
             $data[] = [
                 'id' => Uuid::randomHex(),
                 'active' => true,
@@ -63,16 +65,14 @@ class JobApiController extends AbstractController
                 'mediaId' => $media->getId(),
             ];
         }
-        
-        $this->jobRepository->create($data, $context);
-        
+
+        $jobRepository = $this->container->get('swag_job_entity.repository');
+        $jobRepository->create($data, $context);
+
         return new Response('', Response::HTTP_NO_CONTENT);
-        
     }
-    
-    
+
     /**
-     * 
      * @param Context $context
      * @return MediaEntity
      * @throws MediaNotFoundException
@@ -80,19 +80,18 @@ class JobApiController extends AbstractController
     private function getActiveMedia(Context $context): MediaEntity
     {
         $criteria = new Criteria();
-        $criteria->addFilter(new EqualFilter('active','1'));
+        $criteria->addFilter(new EqualsFilter('active', '1'));
         $criteria->setLimit(1);
-        
-        $job = $this->jobRepository->search($criteria, $context)->getEntities->first();
-        if($job === null)
-        {
+
+        $jobRepository = $this->container->get('swag_job_entity.repository');
+        $job = $jobRepository->search($criteria, $context)->getEntities()->first();
+
+        if ($job === null) {
             throw new MediaNotFoundException('');
         }
-        
+
         return $job;
     }
-    
-    
 
     /**
      * @Route("/api/v{version}/jobs", name="api.job.list", defaults={"auth_enabled"=true}, requirements={"version"="\d+"}, methods={"GET"})

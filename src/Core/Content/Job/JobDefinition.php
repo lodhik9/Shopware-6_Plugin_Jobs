@@ -1,6 +1,6 @@
 <?php
 
-namespace Swag\JobExampleSecond\Entity\CustomEntity;
+namespace Swag\JobExampleSecond\Core\Content\Job;
 
 use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityDefinitionConfigurator;

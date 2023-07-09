@@ -5,31 +5,61 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="Swag\JobExampleSecond\Entity\CustomEntity\JobDefinition" public="true">
+        <service id="Swag\JobExampleSecond\Entity\CustomEntity\JobDefinition">
             <tag name="shopware.entity.defintion" entity="swag_job_entity" />
         </service>
+        
         <service id="Swag\JobExampleSecond\Api\JobApiController" public="true">
+            <argument type="service" id="Swag\JobExampleSecond\Entity\CustomEntity\JobDefinition" />
             <argument type="service" id="media.repository"  />
-            <argument type="service" id="swag_job_entity.repository"  />
+            <!--<argument type="service" id="swag_job_entity.repository"  />-->
+<!--            <argument type="service" id="Swag\JobExampleSecond\Entity\CustomEntity\JobRepository"/>-->
             
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
         </service>
+        
+<!--          JobRepository 
+        <service id="Swag\JobExampleSecond\Entity\CustomEntity\JobRepository" public="true">
+            <argument type="service" id="Shopware\Core\Framework\DataAbstractionLayer\EntityRepository" />
+        </service>
+        -->
+        
+        <service id="Swag\JobExampleSecond\Service\AddDataToPage" >
+            <tag name="kernel.event_subscriber" />
+         </service>
+    
         <service id="Swag\JobExampleSecond\Storefront\Controller\JobController" public="true">
             <argument type="service" id="Shopware\Storefront\Page\GenericPageLoader" />           
             <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService" />    
             <argument type="service" id="media.repository" />
             <argument type="service" id="Shopware\Core\Content\Media\MediaService" />
             <argument type="service" id="Shopware\Core\Content\Media\File\FileSaver" /> 
-
-
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
             </call>
             <call method="setTwig">
                 <argument type="service" id="twig"/>
             </call>
+        </service>
+        
+        <service id="Swag\JobExampleSecond\Storefront\Subscriber\FooterSubscriber" public="true">
+             <tag name="kernel.event_subscriber"/>
+            <argument type="service" id="Shopware\Core\System\SystemConfig\SystemConfigService" />    
+            <!--<argument type="service" id="swag_job_entity.repository"  />-->
+            <!--<argument type="service" id="Swag\JobExampleSecond\Entity\CustomEntity\JobRepository" />-->
+            <argument type="service" id="Swag\JobExampleSecond\Entity\CustomEntity\JobDefinition" />
+            
+        </service>
+        
+         <service id="Swag\JobExampleSecond\Core\Content\Example\SalesChannel\ProductCountRoute" >
+            <argument type="service" id="product.repository"/>
+        </service>
+        
+        <service id="Swag\JobExampleSecond\Service\AddDataToPage" >
+            <argument type="service" id="Swag\JobExampleSecond\Core\Content\Example\SalesChannel\ProductCountRoute"/>
+            <tag name="kernel.event_subscriber" />
         </service>
         
     </services>

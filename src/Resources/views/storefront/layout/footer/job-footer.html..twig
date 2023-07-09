@@ -1,2 +1,56 @@
 <div class="col-md4 footer-columm js-footer-column">
+    <div class="footer-column-headline footer-headline 
+         js-footer-column-headline js-collapse-footer-column-trigger"
+         data-target="#collapseFooterHotline"
+         aria-expanded="true"
+         aria-controls="collapseFooterHotline"
+         >
+        Stores
+        <div class="footer-column-toggle">
+            <span class="footer-plus-icon">{% sw_icon 'plus' %}}</span>
+            <span class="footer-minus-icon">{% sw_icon 'minus' %}}</span>
+        </div> 
+    </div>
+        
+        <div class="footer-column-content collapse 
+             js-column-content footer-contact"
+             id="collapseFooterGotline"
+             aria-labelledby="headingOne">
+            <ul>
+                {% for shop in swag_job_entity.elements  %}
+                    <li><a href="#" data-toggle="modal"
+                           data-target="#job-{{ shop.id }}">
+                        {{ shop.title }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
 </div>
+            
+{% for shop in swag_job_entity  %}
+    <div class="modal" tabindex="-1" role="dialog" id="shop-{{shop.id}}">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{{ shop.title }}</h5>
+                    <button class="close" type="button"
+                            data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                    <div class="modal-body">
+                        <p>
+                            {{ shop.title }}<br>
+                            {{ shop.description }}<br>
+                            {{ shop.imageId }}<br>
+                        </p>
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary"
+                                type="button"
+                                data-dismiss="modal">Close</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+{% endfor  %}
